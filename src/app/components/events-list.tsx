@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Minus, Pencil } from 'lucide-react';
 import { Tables } from '../types/supabase.types';
 import { format } from 'date-fns';
-import { ScheduleDialog } from './schedule-dialog';
+import { EventScheduleDialog } from './event-schedule-dialog';
 
 export const EventsList = () => {
   const { events, updateEvent } = useEventsStore();
-  const handleDowngradeEvent = (event: Tables<'Events'>) => {
+  const handleDowngradeEvent = (event: Tables<'events'>) => {
     updateEvent({ ...event, is_idea: true });
   };
 
@@ -30,7 +30,7 @@ export const EventsList = () => {
               <div className='flex items-center gap-4 justify-end'>
                 <span className='font-medium'>{formattedStartDatetime}</span>
                 <div className='flex items-center gap-2'>
-                  <ScheduleDialog event={event} icon={Pencil} />
+                  <EventScheduleDialog event={event} icon={Pencil} />
                   <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleDowngradeEvent(event)}>
                     <Minus className='w-4' />
                   </Button>

@@ -10,13 +10,13 @@ import { Tables } from '../types/supabase.types';
 import { useEventsStore } from '../hooks/useEventsStore';
 import { useToast } from '@/hooks/use-toast';
 
-interface ScheduleDialogProps {
-  event: Tables<'Events'>;
+interface EventScheduleDialogProps {
+  event: Tables<'events'>;
   icon?: React.ComponentType<{ className?: string }>;
 }
-export const ScheduleDialog: React.FC<ScheduleDialogProps> = ({ event, icon: Icon }) => {
+export const EventScheduleDialog: React.FC<EventScheduleDialogProps> = ({ event, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const { updateEvent } = useEventsStore();
   const { toast } = useToast();
   const handleSelect = (newDay: Date | undefined) => {
@@ -41,7 +41,7 @@ export const ScheduleDialog: React.FC<ScheduleDialogProps> = ({ event, icon: Ico
       });
       return;
     }
-    const updatedEvent: Tables<'Events'> = { ...event, start_datetime: date.toISOString(), is_idea: false };
+    const updatedEvent: Tables<'events'> = { ...event, start_datetime: date.toISOString(), is_idea: false };
     updateEvent(updatedEvent);
     setIsOpen(false);
   };

@@ -33,7 +33,7 @@ export const IdeasForm = () => {
     formState: { errors },
   } = useForm<IdeasFormValues>({ resolver });
   const onSubmit = handleSubmit((data) => {
-    const newEvent: Tables<'Events'> = {
+    const newEvent: Tables<'events'> = {
       created_at: new Date().toISOString(),
       end_datetime: null,
       id: events[events.length - 1].id + 1,

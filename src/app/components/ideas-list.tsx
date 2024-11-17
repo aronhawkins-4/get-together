@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Plus, RefreshCcw, Trash2 } from 'lucide-react';
 import { IdeasForm } from './ideas-form';
 import { useEventsStore } from '../hooks/useEventsStore';
-import { ScheduleDialog } from './schedule-dialog';
+import { EventScheduleDialog } from './event-schedule-dialog';
+import { VoteButtons } from './vote-buttons';
 
 const defaultIdeas = [
   {
@@ -57,10 +58,8 @@ export const IdeasList = () => {
             <span className='font-medium'>{event.name}</span>
             <div className='flex items-center space-x-4'>
               <div className='flex gap-2'>
-                {/* <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleUpgradeEvent(event)}>
-                  <Plus className='w-4' />
-                </Button> */}
-                <ScheduleDialog event={event} icon={Plus} />
+                <VoteButtons />
+                <EventScheduleDialog event={event} icon={Plus} />
                 <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => removeEvent(event.id)}>
                   <Trash2 className='w-4 text-red-700' />
                 </Button>

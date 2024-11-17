@@ -3,13 +3,13 @@ import { Tables } from '../types/supabase.types';
 import { persist } from 'zustand/middleware';
 
 type EventsStoreState = {
-  events: Tables<'Events'>[];
+  events: Tables<'events'>[];
 };
 type EventsStoreActions = {
-  addEvent: (event: Tables<'Events'>) => void;
+  addEvent: (event: Tables<'events'>) => void;
   removeEvent: (eventId: number) => void;
-  setEvents: (events: Tables<'Events'>[]) => void;
-  updateEvent: (event: Tables<'Events'>) => void;
+  setEvents: (events: Tables<'events'>[]) => void;
+  updateEvent: (event: Tables<'events'>) => void;
   clearEvents: () => void;
 };
 

@@ -63,43 +63,31 @@ export type Database = {
       }
       get_togethers: {
         Row: {
-          city: string | null
-          country: string | null
           created_at: string
           end_date: string | null
           events: number[] | null
           id: number
           name: string | null
-          owner: string | null
           participants: string[] | null
           start_date: string | null
-          state: string | null
         }
         Insert: {
-          city?: string | null
-          country?: string | null
           created_at?: string
           end_date?: string | null
           events?: number[] | null
           id?: number
           name?: string | null
-          owner?: string | null
           participants?: string[] | null
           start_date?: string | null
-          state?: string | null
         }
         Update: {
-          city?: string | null
-          country?: string | null
           created_at?: string
           end_date?: string | null
           events?: number[] | null
           id?: number
           name?: string | null
-          owner?: string | null
           participants?: string[] | null
           start_date?: string | null
-          state?: string | null
         }
         Relationships: []
       }
