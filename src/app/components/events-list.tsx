@@ -7,11 +7,34 @@ import { Minus, Pencil } from 'lucide-react';
 import { Tables } from '../types/supabase.types';
 import { format } from 'date-fns';
 import { EventScheduleDialog } from './event-schedule-dialog';
+import { updateEvent } from '../actions/events/updateEvent';
+import { useToast } from '@/hooks/use-toast';
 
-export const EventsList = () => {
-  const { events, updateEvent } = useEventsStore();
-  const handleDowngradeEvent = (event: Tables<'events'>) => {
-    updateEvent({ ...event, is_idea: true });
+interface EventsListProps {
+  events: Tables<'events'>[];
+}
+export const EventsList: React.FC<EventsListProps> = ({ events }) => {
+  const { toast } = useToast();
+
+  const handleDowngradeEvent = async (event: Tables<'events'>) => {
+    try {
+      const { data, error } = await updateEvent({ ...event, is_idea: true });
+      if (error) {
+        throw error;
+      }
+      if (data) {
+        toast({
+          title: 'Event removed from schedule',
+          description: `${event.name} has been removed from the schedule`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to remove event from schedule',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

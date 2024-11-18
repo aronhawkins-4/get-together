@@ -38,6 +38,7 @@ export type Database = {
         Row: {
           created_at: string
           end_datetime: string | null
+          get_together: number | null
           id: number
           is_idea: boolean | null
           name: string
@@ -46,6 +47,7 @@ export type Database = {
         Insert: {
           created_at?: string
           end_datetime?: string | null
+          get_together?: number | null
           id?: number
           is_idea?: boolean | null
           name: string
@@ -54,72 +56,95 @@ export type Database = {
         Update: {
           created_at?: string
           end_datetime?: string | null
+          get_together?: number | null
           id?: number
           is_idea?: boolean | null
           name?: string
           start_datetime?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "events_get_together_fkey"
+            columns: ["get_together"]
+            isOneToOne: false
+            referencedRelation: "get_togethers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       get_togethers: {
         Row: {
           city: string | null
           country: string | null
           created_at: string
-          end_date: string | null
           events: number[] | null
+          from_date: string | null
           id: number
           name: string | null
           owner: string | null
           participants: string[] | null
-          start_date: string | null
           state: string | null
+          to_date: string | null
         }
         Insert: {
           city?: string | null
           country?: string | null
           created_at?: string
-          end_date?: string | null
           events?: number[] | null
+          from_date?: string | null
           id?: number
           name?: string | null
           owner?: string | null
           participants?: string[] | null
-          start_date?: string | null
           state?: string | null
+          to_date?: string | null
         }
         Update: {
           city?: string | null
           country?: string | null
           created_at?: string
-          end_date?: string | null
           events?: number[] | null
+          from_date?: string | null
           id?: number
           name?: string | null
           owner?: string | null
           participants?: string[] | null
-          start_date?: string | null
           state?: string | null
+          to_date?: string | null
         }
         Relationships: []
       }
       votes: {
         Row: {
           created_at: string
+          event: number | null
           id: number
           user: string | null
+          value: Database["public"]["Enums"]["vote_value"] | null
         }
         Insert: {
           created_at?: string
+          event?: number | null
           id?: number
           user?: string | null
+          value?: Database["public"]["Enums"]["vote_value"] | null
         }
         Update: {
           created_at?: string
+          event?: number | null
           id?: number
           user?: string | null
+          value?: Database["public"]["Enums"]["vote_value"] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "votes_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -129,7 +154,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      vote_value: "up" | "down"
     }
     CompositeTypes: {
       [_ in never]: never

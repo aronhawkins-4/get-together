@@ -1,23 +1,22 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { DialogHeader, Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { DialogHeader, Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 import React, { useEffect, useState } from 'react';
-import { Tables } from '../types/supabase.types';
-import { useEventsStore } from '../hooks/useEventsStore';
 import { useToast } from '@/hooks/use-toast';
 import { LoaderCircle, Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { US_STATES } from '../utils/us-states';
-import { watch } from 'fs';
+
 import { US_CITIES } from '../utils/us-cities';
-import { createClient } from '../utils/supabase/client';
+
 import { useRouter } from 'next/navigation';
+import { createGetTogether } from '../actions/get-togethers/createGetTogether';
 
 interface CreateGetTogetherDialogProps {}
 type CreateGetTogetherFormValues = {
@@ -63,7 +62,6 @@ export const CreateGetTogetherDialog: React.FC<CreateGetTogetherDialogProps> = (
 
   // const { updateEvent } = useEventsStore();
   // const { toast } = useToast();
-  const supabase = createClient();
 
   const {
     register,
@@ -75,19 +73,19 @@ export const CreateGetTogetherDialog: React.FC<CreateGetTogetherDialogProps> = (
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsLoading(true);
-      const { data: getTogether, error } = await supabase
-        .from('get_togethers')
-        .insert({
-          name: data.name,
-          state: data.state,
-          city: data.city,
-          from_date: data.fromDate,
-          to_date: data.toDate,
-        })
-        .select()
-        .single();
+      const { data: getTogether, error } = await createGetTogether({
+        name: data.name,
+        state: data.state,
+        city: data.city,
+        from_date: data.fromDate.toISOString().split('T')[0],
+        to_date: data.toDate.toISOString().split('T')[0],
+      });
+
       if (error) {
         throw error;
+      }
+      if (!getTogether) {
+        throw new Error('Get Together not created');
       }
 
       setIsLoading(false);

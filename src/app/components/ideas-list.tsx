@@ -1,66 +1,59 @@
 'use client';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, RefreshCcw, Trash2 } from 'lucide-react';
+import { CalendarPlus, Plus, Trash2 } from 'lucide-react';
 import { IdeasForm } from './ideas-form';
-import { useEventsStore } from '../hooks/useEventsStore';
+
 import { EventScheduleDialog } from './event-schedule-dialog';
 import { VoteButtons } from './vote-buttons';
 
-const defaultIdeas = [
-  {
-    created_at: '2024-11-06T09:30:00Z',
-    end_datetime: '2024-11-06T10:30:00Z',
-    id: 1,
-    is_idea: true,
-    name: 'Morning Yoga Session',
-    start_datetime: '2024-11-06T09:00:00Z',
-  },
-  {
-    created_at: '2024-11-06T11:00:00Z',
-    end_datetime: '2024-11-06T12:00:00Z',
-    id: 2,
-    is_idea: true,
-    name: 'Team Standup Meeting',
-    start_datetime: '2024-11-06T11:30:00Z',
-  },
-  {
-    created_at: '2024-11-06T13:15:00Z',
-    end_datetime: null,
-    id: 3,
-    is_idea: true,
-    name: 'Brainstorming for Marketing Campaign',
-    start_datetime: '2024-11-06T09:00:00Z',
-  },
-  {
-    created_at: '2024-11-06T14:00:00Z',
-    end_datetime: '2024-11-06T15:30:00Z',
-    id: 4,
-    is_idea: true,
-    name: 'Client Presentation',
-    start_datetime: '2024-11-06T14:30:00Z',
-  },
-];
+import { Tables } from '../types/supabase.types';
 
-export const IdeasList = () => {
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { deleteEvent } from '../actions/events/deleteEvent';
+
+interface IdeasListProps {
+  events: Tables<'events'>[];
+}
+export const IdeasList: React.FC<IdeasListProps> = ({ events }) => {
   // const { ideas, removeIdea, setIdeas } = useIdeasStore();
-  const { events, removeEvent, setEvents } = useEventsStore();
+  // const { removeEvent } = useEventsStore();
   const [isAddingIdea, setIsAddingIdea] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
+  const handleDeleteEvent = async (id: number, name: string) => {
+    try {
+      const { error } = await deleteEvent(id);
+      if (error) {
+        throw error;
+      }
+      toast({
+        title: 'Event idea removed',
+        description: `${name} has been removed from the ideas list`,
+      });
+      router.refresh();
+    } catch (error) {
+      console.error(JSON.stringify(error));
+      toast({
+        title: 'Error removing event idea',
+        description: `Error removing ${name} from the ideas list`,
+        variant: 'destructive',
+      });
+    }
+  };
   return (
     <div className='space-y-4'>
       {events.map((event) => {
-        if (!event.is_idea) {
-          return null;
-        }
         return (
           <div key={event.id} className='flex items-center justify-between'>
             <span className='font-medium'>{event.name}</span>
             <div className='flex items-center space-x-4'>
               <div className='flex gap-2'>
-                <VoteButtons />
-                <EventScheduleDialog event={event} icon={Plus} />
-                <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => removeEvent(event.id)}>
+                <VoteButtons eventId={event.id} />
+                <EventScheduleDialog event={event} icon={CalendarPlus} />
+                <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleDeleteEvent(event.id, event.name)}>
                   <Trash2 className='w-4 text-red-700' />
                 </Button>
               </div>
@@ -84,13 +77,13 @@ export const IdeasList = () => {
         )}
         {isAddingIdea && (
           <div className='flex gap-2 w-full'>
-            <IdeasForm />
+            <IdeasForm setIsAddingIdea={setIsAddingIdea} />
             <Button variant={'outline'} onClick={() => setIsAddingIdea(false)}>
               Cancel
             </Button>
           </div>
         )}
-        <Button
+        {/* <Button
           variant='outline'
           className=''
           onClick={() => {
@@ -100,7 +93,7 @@ export const IdeasList = () => {
         >
           <RefreshCcw className='w-4 h-4 mr-2' />
           Reset ideas
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

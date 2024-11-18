@@ -7,14 +7,21 @@ import { Header } from './header';
 
 import { IdeasList } from './ideas-list';
 import { EventsList } from './events-list';
+import { createClient } from '../utils/supabase/server';
 
-export const EventPlanner = () => {
-  // const activities = [
-  //   { id: 1, name: 'Hiking', votes: 8, total: 10 },
-  //   { id: 2, name: 'Beach Day', votes: 6, total: 10 },
-  //   { id: 3, name: 'Movie Night', votes: 4, total: 10 },
-  // ];
+interface GetTogetherDashboardProps {
+  getTogetherId: number;
+}
 
+export const GetTogetherDashboard: React.FC<GetTogetherDashboardProps> = async ({ getTogetherId }) => {
+  const supabase = await createClient();
+  const { data: events, error } = await supabase.from('events').select('*').eq('get_together', getTogetherId);
+  const eventIdeas = events?.filter((event) => event.is_idea);
+  const scheduledEvents = events?.filter((event) => !event.is_idea);
+  if (error) {
+    console.error(JSON.stringify(error));
+    return;
+  }
   return (
     <div className='flex h-screen w-full bg-muted'>
       {/* Sidebar */}
@@ -26,14 +33,14 @@ export const EventPlanner = () => {
         <Header />
 
         {/* Content */}
-        <main className='flex-1 overflow-auto p-6 space-y-6'>
+        <div className='flex-1 overflow-auto grid grid-cols-1 md:grid-cols-2 content-start gap-6 p-6'>
           {/* Voting Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Vote on Activities</CardTitle>
+              <CardTitle>Event Ideas</CardTitle>
             </CardHeader>
             <CardContent>
-              <IdeasList />
+              <IdeasList events={eventIdeas || []} />
             </CardContent>
           </Card>
 
@@ -46,12 +53,18 @@ export const EventPlanner = () => {
               <div className='flex gap-6'>
                 {/* <Calendar mode='single' className='rounded-md border' /> */}
                 <div className='flex-1 flex flex-col gap-4'>
-                  <EventsList />
+                  <EventsList events={scheduledEvents || []} />
                 </div>
               </div>
             </CardContent>
           </Card>
-        </main>
+          <Card>
+            <CardHeader>
+              <CardTitle>Participants</CardTitle>
+            </CardHeader>
+            <CardContent></CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
