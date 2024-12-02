@@ -1,8 +1,8 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { DialogHeader, Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { TimePicker12Hour } from '@/components/ui/TimePicker/time-picker-12-hour';
+import { Button } from '@/app/components/ui/button';
+import { Calendar } from '@/app/components/ui/calendar';
+import { DialogHeader, Dialog, DialogContent, DialogTitle, DialogDescription } from '@/app/components/ui/dialog';
+import { TimePicker12Hour } from '@/app/components/ui/TimePicker/time-picker-12-hour';
 import { add } from 'date-fns';
 
 import React, { useState } from 'react';
@@ -10,8 +10,8 @@ import { Tables } from '../types/supabase.types';
 
 import { useToast } from '@/hooks/use-toast';
 import { Resolver, useForm } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { updateEvent } from '../actions/events/updateEvent';
+import { Input } from '@/app/components/ui/input';
+import { updateEvent } from '../functions/actions/events/updateEvent';
 import { useRouter } from 'next/navigation';
 
 interface EventScheduleDialogProps {
@@ -54,7 +54,7 @@ export const EventScheduleDialog: React.FC<EventScheduleDialogProps> = ({ event,
     handleSubmit,
     setValue,
 
-    formState: { errors },
+    // formState: { errors },
   } = useForm<ScheduleEventFormValues>({ resolver });
 
   const handleSelect = (newDay: Date | undefined) => {
@@ -88,6 +88,7 @@ export const EventScheduleDialog: React.FC<EventScheduleDialogProps> = ({ event,
       if (error) {
         throw error;
       }
+      console.log(updatedEvent);
       toast({
         title: 'Event scheduled',
         description: `${event.name} has been scheduled for ${date.toLocaleDateString()}`,

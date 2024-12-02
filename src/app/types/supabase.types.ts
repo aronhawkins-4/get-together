@@ -37,29 +37,32 @@ export type Database = {
       events: {
         Row: {
           created_at: string
+          creator: string | null
           end_datetime: string | null
           get_together: number | null
           id: number
           is_idea: boolean | null
-          name: string
+          name: string | null
           start_datetime: string | null
         }
         Insert: {
           created_at?: string
+          creator?: string | null
           end_datetime?: string | null
           get_together?: number | null
           id?: number
           is_idea?: boolean | null
-          name: string
+          name?: string | null
           start_datetime?: string | null
         }
         Update: {
           created_at?: string
+          creator?: string | null
           end_datetime?: string | null
           get_together?: number | null
           id?: number
           is_idea?: boolean | null
-          name?: string
+          name?: string | null
           start_datetime?: string | null
         }
         Relationships: [
@@ -72,12 +75,46 @@ export type Database = {
           },
         ]
       }
+      get_together_requests: {
+        Row: {
+          created_at: string
+          get_together: number | null
+          id: number
+          is_accepted: boolean | null
+          responded_at: string | null
+          user: string | null
+        }
+        Insert: {
+          created_at?: string
+          get_together?: number | null
+          id?: number
+          is_accepted?: boolean | null
+          responded_at?: string | null
+          user?: string | null
+        }
+        Update: {
+          created_at?: string
+          get_together?: number | null
+          id?: number
+          is_accepted?: boolean | null
+          responded_at?: string | null
+          user?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "get_together_requests_get_together_fkey"
+            columns: ["get_together"]
+            isOneToOne: false
+            referencedRelation: "get_togethers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       get_togethers: {
         Row: {
           city: string | null
           country: string | null
           created_at: string
-          events: number[] | null
           from_date: string | null
           id: number
           name: string | null
@@ -90,7 +127,6 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
-          events?: number[] | null
           from_date?: string | null
           id?: number
           name?: string | null
@@ -103,7 +139,6 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
-          events?: number[] | null
           from_date?: string | null
           id?: number
           name?: string | null
@@ -114,27 +149,86 @@ export type Database = {
         }
         Relationships: []
       }
+      meals: {
+        Row: {
+          content: Json | null
+          created_at: string
+          date: string | null
+          get_together: number | null
+          id: number
+          type: Database["public"]["Enums"]["meal_type"] | null
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string
+          date?: string | null
+          get_together?: number | null
+          id?: number
+          type?: Database["public"]["Enums"]["meal_type"] | null
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string
+          date?: string | null
+          get_together?: number | null
+          id?: number
+          type?: Database["public"]["Enums"]["meal_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meals_get_together_fkey"
+            columns: ["get_together"]
+            isOneToOne: false
+            referencedRelation: "get_togethers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+        }
+        Relationships: []
+      }
       votes: {
         Row: {
           created_at: string
           event: number | null
           id: number
           user: string | null
-          value: Database["public"]["Enums"]["vote_value"] | null
+          value: string | null
         }
         Insert: {
           created_at?: string
           event?: number | null
           id?: number
           user?: string | null
-          value?: Database["public"]["Enums"]["vote_value"] | null
+          value?: string | null
         }
         Update: {
           created_at?: string
           event?: number | null
           id?: number
           user?: string | null
-          value?: Database["public"]["Enums"]["vote_value"] | null
+          value?: string | null
         }
         Relationships: [
           {
@@ -154,6 +248,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      meal_type: "breakfast" | "lunch" | "dinner"
       vote_value: "up" | "down"
     }
     CompositeTypes: {

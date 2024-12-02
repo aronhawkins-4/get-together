@@ -1,16 +1,14 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import React, { useEffect, useState } from 'react';
+import { Button } from '@/app/components/ui/button';
+import { Input } from '@/app/components/ui/input';
+import React, { useState } from 'react';
 import { Resolver, useForm } from 'react-hook-form';
 
-import { useEventsStore } from '../hooks/useEventsStore';
-import { Tables } from '../types/supabase.types';
 import { usePathname, useRouter } from 'next/navigation';
-import { createClient } from '../utils/supabase/client';
+
 import { toast } from '@/hooks/use-toast';
 import { LoaderCircle } from 'lucide-react';
-import { createEvent } from '../actions/events/createEvent';
+import { createEvent } from '../functions/actions/events/createEvent';
 
 interface IdeasFormProps {
   setIsAddingIdea: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,7 +32,6 @@ const resolver: Resolver<IdeasFormValues> = async (values) => {
   };
 };
 export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsAddingIdea }) => {
-  const { addEvent, events, removeEvent } = useEventsStore();
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const getTogetherId = pathname.split('/')[2];

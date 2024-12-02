@@ -1,13 +1,12 @@
 'use client';
 import React from 'react';
 
-import { useEventsStore } from '../hooks/useEventsStore';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/ui/button';
 import { Minus, Pencil } from 'lucide-react';
 import { Tables } from '../types/supabase.types';
 import { format } from 'date-fns';
 import { EventScheduleDialog } from './event-schedule-dialog';
-import { updateEvent } from '../actions/events/updateEvent';
+import { updateEvent } from '../functions/actions/events/updateEvent';
 import { useToast } from '@/hooks/use-toast';
 
 interface EventsListProps {
@@ -18,7 +17,7 @@ export const EventsList: React.FC<EventsListProps> = ({ events }) => {
 
   const handleDowngradeEvent = async (event: Tables<'events'>) => {
     try {
-      const { data, error } = await updateEvent({ ...event, is_idea: true });
+      const { data, error } = await updateEvent({ ...event, is_idea: true, start_datetime: null, end_datetime: null });
       if (error) {
         throw error;
       }

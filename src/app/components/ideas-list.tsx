@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/ui/button';
 import { CalendarPlus, Plus, Trash2 } from 'lucide-react';
 import { IdeasForm } from './ideas-form';
 
@@ -11,7 +11,7 @@ import { Tables } from '../types/supabase.types';
 
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { deleteEvent } from '../actions/events/deleteEvent';
+import { deleteEvent } from '../functions/actions/events/deleteEvent';
 
 interface IdeasListProps {
   events: Tables<'events'>[];
@@ -53,7 +53,7 @@ export const IdeasList: React.FC<IdeasListProps> = ({ events }) => {
               <div className='flex gap-2'>
                 <VoteButtons eventId={event.id} />
                 <EventScheduleDialog event={event} icon={CalendarPlus} />
-                <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleDeleteEvent(event.id, event.name)}>
+                <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleDeleteEvent(event.id, event.name || '')}>
                   <Trash2 className='w-4 text-red-700' />
                 </Button>
               </div>

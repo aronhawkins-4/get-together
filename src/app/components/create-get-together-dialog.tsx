@@ -1,22 +1,22 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { DialogHeader, Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/app/components/ui/button';
+import { Calendar } from '@/app/components/ui/calendar';
+import { DialogHeader, Dialog, DialogContent, DialogTitle } from '@/app/components/ui/dialog';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { LoaderCircle, Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Resolver, useForm } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/app/components/ui/input';
+import { Label } from '@/app/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select';
 import { US_STATES } from '../utils/us-states';
 
 import { US_CITIES } from '../utils/us-cities';
 
 import { useRouter } from 'next/navigation';
-import { createGetTogether } from '../actions/get-togethers/createGetTogether';
+import { createGetTogether } from '../functions/actions/get-togethers/createGetTogether';
 
 interface CreateGetTogetherDialogProps {}
 type CreateGetTogetherFormValues = {
@@ -111,9 +111,6 @@ export const CreateGetTogetherDialog: React.FC<CreateGetTogetherDialogProps> = (
     if (d?.from) setValue('fromDate', d.from);
     if (d?.to) setValue('toDate', d.to);
   };
-  useEffect(() => {
-    console.log(watch('state'));
-  }, [watch]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

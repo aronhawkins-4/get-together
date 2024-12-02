@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 import { Tables } from '../types/supabase.types';
 import { persist } from 'zustand/middleware';
