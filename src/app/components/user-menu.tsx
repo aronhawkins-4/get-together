@@ -1,13 +1,15 @@
 'use client';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/app/components/ui/dropdown-menu';
-import { User as UserType } from '@supabase/supabase-js';
-import { CircleUser, LogIn, LogOut } from 'lucide-react';
+
+import { LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Database } from '../types/supabase.types';
 
 interface UserMenuProps {
-  user: UserType | null;
+  user: Database['public']['Tables']['users']['Row'] | null;
 }
 
 export const UserMenu = ({ user }: UserMenuProps) => {
@@ -28,8 +30,16 @@ export const UserMenu = ({ user }: UserMenuProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <CircleUser className='w-full h-full' />
+      <DropdownMenuTrigger className='rounded-full'>
+        <Avatar>
+          <AvatarImage src={user.profile_image || ''} />
+          <AvatarFallback>
+            {user.first_name && user.last_name
+              ? `${user.first_name?.at(0)?.toUpperCase()}${user.last_name?.at(0)?.toUpperCase()}`
+              : `${user.email?.at(0)?.toUpperCase()}${user.email?.at(1)?.toUpperCase()}`}
+          </AvatarFallback>
+        </Avatar>
+        {/* <CircleUser className='w-full h-full' /> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -41,6 +51,4 @@ export const UserMenu = ({ user }: UserMenuProps) => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-
-  //   return <LogOut className='w-full h-full cursor-pointer' onClick={handleSignOut} />;
 };

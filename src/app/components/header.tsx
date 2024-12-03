@@ -8,16 +8,19 @@ export const Header = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) {
+    return;
+  }
 
-  // if (!user) {
-  //   return;
-  // }
+  const { data: userData } = await supabase.from('users').select().eq('id', user.id).single();
+  console.log(userData);
+
   return (
-    <header className='bg-card text-card-foreground shadow-sm py-4 px-16 flex justify-between items-center'>
+    <header className='bg-card text-card-foreground shadow-sm py-4 px-8 flex justify-between items-center'>
       <h1 className='text-xl font-bold'>Get Together</h1>
       <div className='flex items-center space-x-4'>
         <div className='flex items-center'>
-          <UserMenu user={user} />
+          <UserMenu user={userData} />
         </div>
       </div>
     </header>

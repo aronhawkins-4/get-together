@@ -1,10 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-
-// import { Progress } from '@/app/components/ui/progress';
-
 import { Sidebar } from './sidebar';
 import { Header } from './header';
-
 import { IdeasList } from './ideas-list';
 import { EventsList } from './events-list';
 import { createClient } from '../utils/supabase/server';
@@ -12,6 +7,7 @@ import { addDays, differenceInDays } from 'date-fns';
 import { DailyMeals } from './daily-meals';
 import { Separator } from '@/app/components/ui/separator';
 import { Block } from './block';
+import { ParticipantsList } from './participants-list';
 
 interface GetTogetherDashboardProps {
   getTogetherId: number;
@@ -38,32 +34,17 @@ export const GetTogetherDashboard: React.FC<GetTogetherDashboardProps> = async (
     console.error(JSON.stringify(eventsError));
     return;
   }
+
+  // const {data: participants, error: participantsError} = await supabase.from('users').select().eq('')
   return (
     <div className='flex h-screen w-full bg-muted'>
-      {/* Sidebar */}
       <Sidebar />
-
-      {/* Main Content */}
       <div className='flex-1 flex flex-col overflow-hidden'>
-        {/* Header */}
         <Header />
-
-        {/* Content */}
-        <div className='flex-1 overflow-auto grid grid-cols-1 md:grid-cols-2 content-start gap-6 p-6'>
-          {/* Voting Section */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Event Ideas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <IdeasList events={eventIdeas || []} />
-            </CardContent>
-          </Card> */}
+        <div className='flex-1 overflow-auto grid grid-cols-1 content-start gap-6 p-6'>
           <Block title='Event Ideas'>
             <IdeasList events={eventIdeas || []} />
           </Block>
-
-          {/* Calendar Section */}
           <Block title='Upcoming Events'>
             <div className='flex gap-6'>
               <div className='flex-1 flex flex-col gap-4'>
@@ -71,18 +52,6 @@ export const GetTogetherDashboard: React.FC<GetTogetherDashboardProps> = async (
               </div>
             </div>
           </Block>
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Upcoming Events</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className='flex gap-6'>
-                <div className='flex-1 flex flex-col gap-4'>
-                  <EventsList events={scheduledEvents || []} />
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
           <Block title='Meals'>
             <div className='flex flex-col gap-8'>
               {duration &&
@@ -94,28 +63,9 @@ export const GetTogetherDashboard: React.FC<GetTogetherDashboardProps> = async (
                 ))}
             </div>
           </Block>
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Meals</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className='flex flex-col gap-8'>
-                {duration &&
-                  Array.from({ length: duration }).map((_, index) => (
-                    <div key={index} className='flex flex-col gap-8'>
-                      <DailyMeals key={index} date={addDays(startDate, index)} getTogetherId={getTogetherId} />
-                      {index !== duration - 1 && <Separator />}
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card> */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Participants</CardTitle>
-            </CardHeader>
-            <CardContent></CardContent>
-          </Card> */}
+          {/* <Block title='Participants'>
+                <ParticipantsList />
+              </Block> */}
         </div>
       </div>
     </div>
