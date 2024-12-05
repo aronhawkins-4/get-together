@@ -86,7 +86,7 @@ export const VoteButtons = ({ eventId }: VoteButtonsProps) => {
         variant: 'destructive',
       });
     }
-  }, [error]);
+  }, [error, toast]);
   return (
     <div className='flex gap-2'>
       <Button variant='outline' size='icon' className='w-8 h-8' onClick={() => handleVote('up')}>

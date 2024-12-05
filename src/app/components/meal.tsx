@@ -3,7 +3,8 @@
 import { useRef, useState } from 'react';
 import { createOrUpdateMeal } from '../functions/actions/meals/createOrUpdateMeal';
 import { useToast } from '@/hooks/use-toast';
-import { Textarea } from '@/app/components/ui/textarea';
+// import { Textarea } from '@/app/components/ui/textarea';
+import { Editor, LexicalEditor } from './lexical/lexical-editor';
 
 interface MealProps {
   date: Date;
@@ -43,7 +44,8 @@ export const Meal = ({ date, type, getTogether, content }: MealProps) => {
       <div className='flex gap-2 justify-between'>
         <p className='font-bold'>{type}</p>
       </div>
-      <Textarea className='bg-muted p-2 border border-gray-300 rounded-lg text-sm' defaultValue={mealContent || ''} onBlur={handleUpdate} ref={textareaRef}></Textarea>
+      <Editor />
+      {/* <Textarea className='bg-muted p-2 border border-gray-300 rounded-lg text-sm' defaultValue={mealContent || ''} onBlur={handleUpdate} ref={textareaRef}></Textarea> */}
     </div>
   );
 };

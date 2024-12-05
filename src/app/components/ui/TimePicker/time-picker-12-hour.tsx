@@ -15,9 +15,9 @@ interface TimePicker12HourProps {
 export function TimePicker12Hour({ date, setDate }: TimePicker12HourProps) {
   const [period, setPeriod] = React.useState<Period>('PM');
 
-  const minuteRef = React.useRef<HTMLInputElement>(null);
-  const hourRef = React.useRef<HTMLInputElement>(null);
-  const periodRef = React.useRef<HTMLButtonElement>(null);
+  const minuteRef = React.useRef<HTMLButtonElement | null>(null);
+  const hourRef = React.useRef<HTMLButtonElement | null>(null);
+  const periodRef = React.useRef<HTMLButtonElement | null>(null);
 
   return (
     <div className='flex items-start gap-2 text-primary'>

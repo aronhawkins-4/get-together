@@ -7,7 +7,7 @@ import { addDays, differenceInDays } from 'date-fns';
 import { DailyMeals } from './daily-meals';
 import { Separator } from '@/app/components/ui/separator';
 import { Block } from './block';
-import { ParticipantsList } from './participants-list';
+// import { ParticipantsList } from './participants-list';
 
 interface GetTogetherDashboardProps {
   getTogetherId: number;

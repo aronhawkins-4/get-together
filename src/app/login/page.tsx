@@ -10,7 +10,6 @@ import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import Link from 'next/link';
-import { Label } from '@/app/components/ui/label';
 
 const LoginFormSchema = z.object({
   email: z.string().email(),
