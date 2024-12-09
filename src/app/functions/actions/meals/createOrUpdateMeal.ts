@@ -6,12 +6,18 @@ import { revalidatePath } from 'next/cache';
 
 interface CreateMealProps {
   content: string;
-  type: Database['public']['Enums']['meal_type'];
+  type: Database['public']['Enums']['meal_type'] | undefined;
   date: string;
-  getTogether: number;
+  getTogether: number | undefined;
 }
 // TODO: Add validation
 export const createOrUpdateMeal = async ({ content, type, date, getTogether }: CreateMealProps) => {
+  if (!getTogether) {
+    throw new Error('No Get Together ID');
+  }
+  if (!type) {
+    throw new Error('No Meal Type');
+  }
   const supabase = await createClient();
   const {
     data: { user },

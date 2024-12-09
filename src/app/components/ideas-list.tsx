@@ -1,7 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/app/components/ui/button';
-import { CalendarPlus, Plus, Trash2 } from 'lucide-react';
+import { CalendarPlus, LoaderCircle, Plus, Trash2 } from 'lucide-react';
 import { IdeasForm } from './ideas-form';
 
 import { EventScheduleDialog } from './event-schedule-dialog';
@@ -17,11 +17,10 @@ interface IdeasListProps {
   events: Tables<'events'>[];
 }
 export const IdeasList: React.FC<IdeasListProps> = ({ events }) => {
-  // const { ideas, removeIdea, setIdeas } = useIdeasStore();
-  // const { removeEvent } = useEventsStore();
-  const [isAddingIdea, setIsAddingIdea] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleDeleteEvent = async (id: number, name: string) => {
     try {
@@ -43,6 +42,10 @@ export const IdeasList: React.FC<IdeasListProps> = ({ events }) => {
       });
     }
   };
+
+  useEffect(() => {
+    setIsUpdating(false);
+  }, [events]);
   return (
     <div className='space-y-4'>
       {events.map((event) => {
@@ -68,32 +71,22 @@ export const IdeasList: React.FC<IdeasListProps> = ({ events }) => {
           </div>
         );
       })}
+      {isUpdating && <LoaderCircle className='animate-spin' />}
       <div className='mt-4 flex gap-2 w-full'>
-        {!isAddingIdea && (
-          <Button variant='outline' className='w-full' onClick={() => setIsAddingIdea(true)}>
+        {!isFormOpen && (
+          <Button variant='outline' className='w-full' onClick={() => setIsFormOpen(true)}>
             <Plus className='w-4 h-4 mr-2' />
             Add new idea
           </Button>
         )}
-        {isAddingIdea && (
+        {isFormOpen && (
           <div className='flex gap-2 w-full'>
-            <IdeasForm setIsAddingIdea={setIsAddingIdea} />
-            <Button variant={'outline'} onClick={() => setIsAddingIdea(false)}>
+            <IdeasForm setIsOpen={setIsFormOpen} setIsUpdating={setIsUpdating} />
+            <Button variant={'outline'} onClick={() => setIsFormOpen(false)}>
               Cancel
             </Button>
           </div>
         )}
-        {/* <Button
-          variant='outline'
-          className=''
-          onClick={() => {
-            setEvents(defaultIdeas);
-            // clearEvents();
-          }}
-        >
-          <RefreshCcw className='w-4 h-4 mr-2' />
-          Reset ideas
-        </Button> */}
       </div>
     </div>
   );

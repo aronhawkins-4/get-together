@@ -75,41 +75,6 @@ export type Database = {
           },
         ]
       }
-      get_together_requests: {
-        Row: {
-          created_at: string
-          get_together: number | null
-          id: number
-          is_accepted: boolean | null
-          responded_at: string | null
-          user: string | null
-        }
-        Insert: {
-          created_at?: string
-          get_together?: number | null
-          id?: number
-          is_accepted?: boolean | null
-          responded_at?: string | null
-          user?: string | null
-        }
-        Update: {
-          created_at?: string
-          get_together?: number | null
-          id?: number
-          is_accepted?: boolean | null
-          responded_at?: string | null
-          user?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "get_together_requests_get_together_fkey"
-            columns: ["get_together"]
-            isOneToOne: false
-            referencedRelation: "get_togethers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       get_togethers: {
         Row: {
           city: string | null
@@ -148,6 +113,41 @@ export type Database = {
           to_date?: string | null
         }
         Relationships: []
+      }
+      invites: {
+        Row: {
+          created_at: string
+          get_together: number | null
+          id: number
+          is_accepted: boolean | null
+          responded_at: string | null
+          user: string | null
+        }
+        Insert: {
+          created_at?: string
+          get_together?: number | null
+          id?: number
+          is_accepted?: boolean | null
+          responded_at?: string | null
+          user?: string | null
+        }
+        Update: {
+          created_at?: string
+          get_together?: number | null
+          id?: number
+          is_accepted?: boolean | null
+          responded_at?: string | null
+          user?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "get_together_requests_get_together_fkey"
+            columns: ["get_together"]
+            isOneToOne: false
+            referencedRelation: "get_togethers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       meals: {
         Row: {

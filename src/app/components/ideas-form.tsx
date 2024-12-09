@@ -11,7 +11,8 @@ import { LoaderCircle } from 'lucide-react';
 import { createEvent } from '../functions/actions/events/createEvent';
 
 interface IdeasFormProps {
-  setIsAddingIdea: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type IdeasFormValues = {
   ideaName: string;
@@ -31,7 +32,7 @@ const resolver: Resolver<IdeasFormValues> = async (values) => {
       : {},
   };
 };
-export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsAddingIdea }) => {
+export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsOpen, setIsUpdating }) => {
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const getTogetherId = pathname.split('/')[2];
@@ -43,7 +44,9 @@ export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsAddingIdea }) => {
     formState: { errors },
   } = useForm<IdeasFormValues>({ resolver });
   const onSubmit = handleSubmit(async (data) => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setIsOpen(false);
+    setIsUpdating(true);
     const newEvent = {
       end_datetime: null,
       is_idea: true,
@@ -52,33 +55,26 @@ export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsAddingIdea }) => {
       get_together: Number(data.getTogetherId),
     };
     try {
-      // addEvent(newEvent);
       reset();
       const { data: newEventData, error } = await createEvent({ ...newEvent });
-
-      // const { data: newEventData, error } = await supabase.from('events').insert(newEvent).select().single();
       if (error) {
         throw error;
       }
-      console.log(newEventData);
+
       toast({
         title: 'New event idea created!',
         description: `${newEventData?.name} has been added to the ideas list`,
       });
       router.refresh();
-      setIsAddingIdea(false);
     } catch (error) {
       reset();
-      // removeEvent(newEvent.id);
       console.error(error);
-      setIsAddingIdea(false);
       toast({
         title: 'Error adding event idea',
         description: `Error adding ${data?.ideaName} to the ideas list`,
         variant: 'destructive',
       });
     } finally {
-      setIsLoading(false);
     }
   });
 
@@ -89,7 +85,6 @@ export const IdeasForm: React.FC<IdeasFormProps> = ({ setIsAddingIdea }) => {
         {errors?.ideaName && <p className='absolute left-0 top-full'>{errors.ideaName.message}</p>}
         <Input type='hidden' {...register('getTogetherId')} value={getTogetherId} />
       </div>
-
       <Button type='submit' disabled={isLoading}>
         {isLoading ? <LoaderCircle className='animate-spin' /> : 'Add idea'}
       </Button>
